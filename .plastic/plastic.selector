@@ -1,0 +1,4 @@
+repository "Sisyphus@darkflamebbq@cloud.cn"
+  path "/"
+    br "/main"
+    co "/main"
