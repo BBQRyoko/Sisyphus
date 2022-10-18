@@ -7,14 +7,23 @@ public class SalmonManager : MonoBehaviour
 {
     [Header("Status")]
     public bool haveEgg;
-    public bool onGround;
+    bool onGround;
     bool inWater;
-    public bool onWall;
-    public bool onLeftWall;
-    public bool onRightWall;
+    bool onWall;
+    bool onLeftWall;
+    bool onRightWall;
     float velocityX;
     bool isJumping;
     float throwingTimer;
+    public bool isDamaged;
+    float tempDamageTimer;
+    [SerializeField] int curHealth;
+    [SerializeField] int maxHealth = 100;
+
+    [Header("Egg")]
+    [SerializeField] int maxContainerHealth = 10;
+    public int containerHealth;
+    public float babyEnergy = 100f;
 
     [Header("MoveAttributes")]
     public float moveSp;
@@ -57,7 +66,7 @@ public class SalmonManager : MonoBehaviour
     public float dashWait;
     Vector2 dir;
 
-    Rigidbody2D rig;
+    public Rigidbody2D rig;
     Animator anim;
     public SpriteRenderer sprite;
     public GameObject eggSprite;
@@ -72,6 +81,8 @@ public class SalmonManager : MonoBehaviour
         rig = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sprite = GetComponentInChildren<SpriteRenderer>();
+        curHealth = maxHealth;
+        containerHealth = maxContainerHealth;
     }
     private void Update()
     {
@@ -90,6 +101,18 @@ public class SalmonManager : MonoBehaviour
         onRightWall = RightWallCheck();
         onWall = onLeftWall ^ onRightWall;
         curVelocity = rig.velocity;
+
+        if (isDamaged)
+        {
+            canMove = false;
+            canJump = false;
+        }
+        else 
+        {
+            canMove = true;
+            canJump = true;
+        }
+
 
         if (throwingTimer <= 0) 
         {
@@ -114,7 +137,21 @@ public class SalmonManager : MonoBehaviour
             sprite.flipY = false;
             throwingTimer = 0;
             canMove = true;
-            rig.drag = 1f;
+            rig.drag = 1.5f;
+        }
+        if (isDamaged)
+        {
+            tempDamageTimer += Time.deltaTime;
+            if (tempDamageTimer >= 0.75f)
+            {
+                tempDamageTimer = 0;
+                isDamaged = false;
+            }
+        }
+        else 
+        {
+            isDamaged = false;
+            tempDamageTimer = 0;
         }
     }
     void EggManager() 
@@ -122,6 +159,10 @@ public class SalmonManager : MonoBehaviour
         if (haveEgg)
         {
             eggSprite.SetActive(true);
+            if (babyEnergy <= 100) 
+            {
+                babyEnergy += Time.deltaTime * 5f;
+            }
             if (!onWall) 
             {
                 if (Input.GetMouseButton(0))
@@ -152,7 +193,18 @@ public class SalmonManager : MonoBehaviour
         }
         else 
         {
+            babyEnergy -= Time.deltaTime * 10f;
+            if (babyEnergy <= 0) 
+            {
+                babyEnergy = 0;
+                Debug.Log("Baby is alone and die");
+            }
             eggSprite.SetActive(false);
+        }
+        if (containerHealth <= 0) 
+        {
+            containerHealth = 0;
+            Debug.Log("Container destroyed, Game Over");
         }
     }
     void CharacterLocomtion() 
@@ -205,7 +257,7 @@ public class SalmonManager : MonoBehaviour
         }
         else //在空中时
         {
-            if (Input.GetAxis("Jump") > 0 && !doubleJumped && !haveEgg && jumpButtonRelease && !onWall && rig.velocity.y >= 0 && !haveEgg)
+            if (Input.GetAxis("Jump") > 0 && !doubleJumped && !haveEgg && jumpButtonRelease && !onWall && !haveEgg)
             {
                 rig.velocity = new Vector2(rig.velocity.x, jumpSp * 0.85f);
                 doubleJumped = true;
@@ -276,6 +328,19 @@ public class SalmonManager : MonoBehaviour
         }
         #endregion
     }
+    public void PlayerTakeDamage(int damage, bool damageOnRight) 
+    {
+        isDamaged = true;
+        curHealth -= damage;
+        if (damageOnRight)
+        {
+            rig.AddForce(new Vector2(-1, 0.75f) * 5f, ForceMode2D.Impulse);
+        }
+        else 
+        {
+            rig.AddForce(new Vector2(1, 0.75f) * 5f, ForceMode2D.Impulse);
+        }
+    }
     bool GroundCheck()
     {
         Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position + pointOffset, size, 0, groundLayer);
@@ -344,6 +409,18 @@ public class SalmonManager : MonoBehaviour
             {
                 Destroy(collision.gameObject);
                 haveEgg = true;
+            }
+        }
+        
+        if (collision.collider.tag == "Enemy" && !collision.collider.GetComponent<EnemyManager>().isStunned && !isDamaged) 
+        {
+            if (transform.position.x < collision.transform.position.x) //敌人在右
+            {
+                PlayerTakeDamage(10, true);
+            }
+            else 
+            {
+                PlayerTakeDamage(10, false);
             }
         }
     }

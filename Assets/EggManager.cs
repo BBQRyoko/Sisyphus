@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EggManager : MonoBehaviour
 {
+    SalmonManager salmonManager;
     Rigidbody2D rig;
     public bool isPickable;
     int damage = 10;
@@ -11,6 +12,7 @@ public class EggManager : MonoBehaviour
     private void Start()
     {
         isPickable = false;
+        salmonManager = FindObjectOfType<SalmonManager>();
         rig = GetComponent<Rigidbody2D>();
     }
 
@@ -34,6 +36,7 @@ public class EggManager : MonoBehaviour
         }
         if (collision.gameObject.tag == "Enemy" && !isPickable) 
         {
+            salmonManager.containerHealth -= 1;
             collision.gameObject.GetComponent<EnemyManager>().DamageOnEnemy(damage);
             if (transform.position.x < collision.transform.position.x)
                 BounceOnEnemy(true);
