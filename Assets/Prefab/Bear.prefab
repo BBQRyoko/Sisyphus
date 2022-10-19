@@ -107,9 +107,9 @@ GameObject:
   - component: {fileID: 235903101272087028}
   - component: {fileID: 235903101272087027}
   - component: {fileID: 235903101272087026}
-  - component: {fileID: 235903101272087031}
   - component: {fileID: 235903101272087030}
   - component: {fileID: 235903101272087029}
+  - component: {fileID: 65977122043285883}
   m_Layer: 13
   m_Name: BearEnemy
   m_TagString: Enemy
@@ -204,32 +204,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!61 &235903101272087031
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 235903101272086985}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.0052820146, y: -0.021128148}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.29, y: 0.34}
-    newSize: {x: 5.27, y: 4.73}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.19563782, y: 0.3114385}
-  m_EdgeRadius: 0
 --- !u!50 &235903101272087030
 Rigidbody2D:
   serializedVersion: 4
@@ -263,7 +237,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d6e9483d73852c439902f3ac2d255e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isBoss: 0
   health: 20
   isStunned: 0
   isAttacking: 0
@@ -274,6 +247,8 @@ MonoBehaviour:
   rightPos: {fileID: 235903099619430770}
   projectileObject: {fileID: 0}
   shootingPos: {fileID: 0}
+  isBear: 0
+  isBearDashing: 0
   playerOnLeft: 0
   playerOnRight: 0
   leftPointOffset: {x: -2.5, y: 0}
@@ -282,3 +257,19 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 512
+--- !u!70 &65977122043285883
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 235903101272086985}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.19118914}
+  m_Size: {x: 1.2296727, y: 1.7426219}
+  m_Direction: 0

@@ -15,7 +15,7 @@ public class SalmonManager : MonoBehaviour
     bool onRightWall;
     float velocityX;
     bool isJumping;
-    float throwingTimer;
+    public float throwingTimer;
     public bool isDamaged;
     float tempDamageTimer;
     [SerializeField] int curHealth;
@@ -143,8 +143,12 @@ public class SalmonManager : MonoBehaviour
         }
         if (isDamaged)
         {
+            if (!onGround) 
+            {
+                rig.drag = 2f;
+            }
             tempDamageTimer += Time.deltaTime;
-            if (tempDamageTimer >= 0.75f)
+            if (tempDamageTimer >= 0.5f)
             {
                 tempDamageTimer = 0;
                 isDamaged = false;
@@ -175,8 +179,15 @@ public class SalmonManager : MonoBehaviour
                         egg.SetActive(true);
                         egg.transform.parent = null;
                         egg.transform.position = shootingPos.transform.position;
-                        egg.GetComponent<Rigidbody2D>().velocity = new Vector2(curVelocity.x, 0);
-                        egg.GetComponent<Rigidbody2D>().AddForce((shootingDir.position - shootingPos.position).normalized * throwingForce, ForceMode2D.Impulse);
+                        egg.GetComponent<Rigidbody2D>().velocity = curVelocity;
+                        if (onGround)
+                        {
+                            egg.GetComponent<Rigidbody2D>().AddForce(new Vector2(1,0.15f) * throwingForce, ForceMode2D.Impulse);
+                        }
+                        else 
+                        {
+                            egg.GetComponent<Rigidbody2D>().AddForce(new Vector2(1f, 0.55f) * throwingForce * 0.8f, ForceMode2D.Impulse);
+                        }
                     }
                     else
                     {
@@ -184,8 +195,15 @@ public class SalmonManager : MonoBehaviour
                         egg.SetActive(true);
                         egg.transform.parent = null;
                         egg.transform.position = negShootingDir.transform.position;
-                        egg.GetComponent<Rigidbody2D>().velocity = new Vector2(curVelocity.x, 0);
-                        egg.GetComponent<Rigidbody2D>().AddForce((negShootingDir.position - negShootingPos.position).normalized * throwingForce, ForceMode2D.Impulse);
+                        egg.GetComponent<Rigidbody2D>().velocity = curVelocity;
+                        if (onGround)
+                        {
+                            egg.GetComponent<Rigidbody2D>().AddForce(new Vector2(-1, 0.15f) * throwingForce, ForceMode2D.Impulse);
+                        }
+                        else
+                        {
+                            egg.GetComponent<Rigidbody2D>().AddForce(new Vector2(-1f, 0.55f) * throwingForce * 0.8f, ForceMode2D.Impulse);
+                        }
                     }
                     haveEgg = false;
                     throwingTimer = 0.5f;
@@ -253,6 +271,11 @@ public class SalmonManager : MonoBehaviour
             doubleJumped = false;
             canJump = true;
             canWallJump = true;
+            //if (isDamaged) 
+            //{
+            //    isDamaged = false;
+            //    rig.velocity = Vector2.zero;
+            //}
             if (Input.GetAxis("Jump") == 0 && !groundJumpReset) 
             {
                 groundJumpReset = true;
@@ -265,7 +288,7 @@ public class SalmonManager : MonoBehaviour
             if (Input.GetAxis("Jump") == 1 && !doubleJumped && !haveEgg && !onWall && jumpButtonRelease)
             {
                 Debug.Log("123");
-                rig.velocity = new Vector2(rig.velocity.x * 0.8f, jumpSp*0.65f);
+                rig.velocity = new Vector2(rig.velocity.x * 0.9f, jumpSp*0.75f);
                 doubleJumped = true;
                 jumpButtonRelease = false;
             }
@@ -337,14 +360,15 @@ public class SalmonManager : MonoBehaviour
     public void PlayerTakeDamage(int damage, bool damageOnRight) 
     {
         isDamaged = true;
+        rig.velocity = Vector2.zero;
         curHealth -= damage;
         if (damageOnRight)
         {
-            rig.AddForce(new Vector2(-0.35f, 1f).normalized * 12.5f, ForceMode2D.Impulse);
+            rig.AddForce(new Vector2(-1f, 0.9f).normalized * 15f, ForceMode2D.Impulse);
         }
         else 
         {
-            rig.AddForce(new Vector2(0.35f, 1f).normalized * 12.5f, ForceMode2D.Impulse);
+            rig.AddForce(new Vector2(1f, 0.9f).normalized * 15f, ForceMode2D.Impulse);
         }
     }
     bool GroundCheck()

@@ -11,11 +11,11 @@ public class FootDamager : MonoBehaviour
     }
     void BounceOnEnemy()
     {
-        salmonManager.rig.velocity = new Vector2(salmonManager.rig.velocity.x, 10f);
+        salmonManager.rig.velocity = new Vector2(salmonManager.rig.velocity.x, 12f);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Enemy" && !salmonManager.isDamaged)
+        if (collision.gameObject.tag == "Enemy" && !salmonManager.isDamaged && salmonManager.throwingTimer<=0)
         {
             BounceOnEnemy();
             collision.gameObject.GetComponent<EnemyManager>().StunOnEnemy();

@@ -76,9 +76,9 @@ GameObject:
   - component: {fileID: 3479870874184460725}
   - component: {fileID: 3479870874184460722}
   - component: {fileID: 3479870874184460723}
-  - component: {fileID: 3479870874184460726}
   - component: {fileID: 3479870874184460727}
   - component: {fileID: 3479870874184460724}
+  - component: {fileID: 8994504623584419699}
   m_Layer: 13
   m_Name: SharkEnemy
   m_TagString: Enemy
@@ -173,32 +173,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!61 &3479870874184460726
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3479870874184460680}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.048703074, y: -0.15585032}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.8125, y: 2.125}
-    newSize: {x: 5.27, y: 4.73}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1.1696198, y: 1.8132994}
-  m_EdgeRadius: 0
 --- !u!50 &3479870874184460727
 Rigidbody2D:
   serializedVersion: 4
@@ -252,6 +226,22 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 0
+--- !u!70 &8994504623584419699
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3479870874184460680}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.19118914}
+  m_Size: {x: 1.2296727, y: 1.7426219}
+  m_Direction: 0
 --- !u!1 &3479870874272436625
 GameObject:
   m_ObjectHideFlags: 0
