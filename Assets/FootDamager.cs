@@ -20,5 +20,18 @@ public class FootDamager : MonoBehaviour
             BounceOnEnemy();
             collision.gameObject.GetComponent<EnemyManager>().StunOnEnemy();
         }
+        else if (collision.gameObject.tag == "FishBone") 
+        {
+            BounceOnEnemy();
+            Destroy(collision.gameObject);
+        }
+        else if (collision.gameObject.tag == "Egg")
+        {
+            if (collision.GetComponent<EggManager>().isPickable)
+            {
+                Destroy(collision.gameObject);
+                salmonManager.haveEgg = true;
+            }
+        }
     }
 }

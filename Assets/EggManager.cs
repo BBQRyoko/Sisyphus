@@ -20,11 +20,11 @@ public class EggManager : MonoBehaviour
     {
         if (enemyOnRight)
         {
-            rig.AddForce(new Vector2(-0.15f, 0.2f).normalized * (15f), ForceMode2D.Impulse); ;
+            rig.AddForce(new Vector2(-0.15f, 0.2f).normalized * (10f), ForceMode2D.Impulse); ;
         }
         else
         {
-            rig.AddForce(new Vector2(0.15f, 0.2f).normalized * (15f), ForceMode2D.Impulse); ;
+            rig.AddForce(new Vector2(0.15f, 0.2f).normalized * (10f), ForceMode2D.Impulse); ;
         }
     }
 
@@ -38,6 +38,7 @@ public class EggManager : MonoBehaviour
         {
             salmonManager.containerHealth -= 1;
             collision.gameObject.GetComponent<EnemyManager>().DamageOnEnemy(damage);
+            isPickable = true;
             if (transform.position.x < collision.transform.position.x)
                 BounceOnEnemy(true);
             else

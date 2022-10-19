@@ -10,6 +10,8 @@ TagManager:
   - NoMask
   - Egg
   - Enemy
+  - FishBone
+  - Foot
   layers:
   - Default
   - TransparentFX
@@ -18,14 +20,14 @@ TagManager:
   - Water
   - UI
   - 
-  - 
+  - Egg
   - Platforms
   - Player
   - Volumes
   - OneWayPlatforms
   - Projectiles
   - Enemies
-  - 
+  - CharacterHolder
   - Ladders
   - PlayerProjectiles
   - MovingObjects

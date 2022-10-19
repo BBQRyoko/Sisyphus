@@ -8,6 +8,7 @@ public class SalmonManager : MonoBehaviour
     [Header("Status")]
     public bool haveEgg;
     bool onGround;
+    bool groundJumpReset;
     bool inWater;
     bool onWall;
     bool onLeftWall;
@@ -21,6 +22,7 @@ public class SalmonManager : MonoBehaviour
     [SerializeField] int maxHealth = 100;
 
     [Header("Egg")]
+    [SerializeField] float throwingForce;
     [SerializeField] int maxContainerHealth = 10;
     public int containerHealth;
     public float babyEnergy = 100f;
@@ -83,6 +85,7 @@ public class SalmonManager : MonoBehaviour
         sprite = GetComponentInChildren<SpriteRenderer>();
         curHealth = maxHealth;
         containerHealth = maxContainerHealth;
+        haveEgg = true;
     }
     private void Update()
     {
@@ -110,16 +113,15 @@ public class SalmonManager : MonoBehaviour
         else 
         {
             canMove = true;
-            canJump = true;
         }
 
 
         if (throwingTimer <= 0) 
         {
-            if (!inWater)
-                moveSp = 5f;
+            if (!haveEgg)
+                moveSp = 8.5f;
             else
-                moveSp = 6.5f;
+                moveSp = 5.5f;
         }
     }
     void TempTimeManager() 
@@ -137,7 +139,7 @@ public class SalmonManager : MonoBehaviour
             sprite.flipY = false;
             throwingTimer = 0;
             canMove = true;
-            rig.drag = 1.5f;
+            rig.drag = 0.5f;
         }
         if (isDamaged)
         {
@@ -167,7 +169,6 @@ public class SalmonManager : MonoBehaviour
             {
                 if (Input.GetMouseButton(0))
                 {
-                    float throwingForce = 20f;
                     if (!sprite.flipX)
                     {
                         GameObject egg = Instantiate(shootingEgg, shootingPos.transform);
@@ -175,7 +176,7 @@ public class SalmonManager : MonoBehaviour
                         egg.transform.parent = null;
                         egg.transform.position = shootingPos.transform.position;
                         egg.GetComponent<Rigidbody2D>().velocity = new Vector2(curVelocity.x, 0);
-                        egg.GetComponent<Rigidbody2D>().AddForce((shootingDir.position - shootingPos.position) * throwingForce, ForceMode2D.Impulse);
+                        egg.GetComponent<Rigidbody2D>().AddForce((shootingDir.position - shootingPos.position).normalized * throwingForce, ForceMode2D.Impulse);
                     }
                     else
                     {
@@ -184,7 +185,7 @@ public class SalmonManager : MonoBehaviour
                         egg.transform.parent = null;
                         egg.transform.position = negShootingDir.transform.position;
                         egg.GetComponent<Rigidbody2D>().velocity = new Vector2(curVelocity.x, 0);
-                        egg.GetComponent<Rigidbody2D>().AddForce((negShootingDir.position - negShootingPos.position) * throwingForce, ForceMode2D.Impulse);
+                        egg.GetComponent<Rigidbody2D>().AddForce((negShootingDir.position - negShootingPos.position).normalized * throwingForce, ForceMode2D.Impulse);
                     }
                     haveEgg = false;
                     throwingTimer = 0.5f;
@@ -236,12 +237,12 @@ public class SalmonManager : MonoBehaviour
 
         #region ÌøÔ¾
         //ÌøÔ¾
-        if (Input.GetAxis("Jump") > 0 && !isJumping && canJump && onGround && jumpButtonRelease && !onWall)
+        if (Input.GetAxis("Jump") == 1 && !isJumping && canJump && onGround && jumpButtonRelease && !onWall && throwingTimer<=0 && groundJumpReset)
         {
             rig.velocity = new Vector2(rig.velocity.x, jumpSp);
             isJumping = true;
             jumpButtonRelease = false;
-
+            groundJumpReset = false;
             //JumpParticle.Play();
             //anim.SetTrigger("Jump");
         }
@@ -250,16 +251,21 @@ public class SalmonManager : MonoBehaviour
         {
             isJumping = false;
             doubleJumped = false;
+            canJump = true;
             canWallJump = true;
-
+            if (Input.GetAxis("Jump") == 0 && !groundJumpReset) 
+            {
+                groundJumpReset = true;
+            }
             //anim.SetBool("onGround", true);
             //PlayPartical(WalkPartical);
         }
         else //ÔÚ¿ÕÖÐÊ±
         {
-            if (Input.GetAxis("Jump") > 0 && !doubleJumped && !haveEgg && jumpButtonRelease && !onWall && !haveEgg)
+            if (Input.GetAxis("Jump") == 1 && !doubleJumped && !haveEgg && !onWall && jumpButtonRelease)
             {
-                rig.velocity = new Vector2(rig.velocity.x, jumpSp * 0.85f);
+                Debug.Log("123");
+                rig.velocity = new Vector2(rig.velocity.x * 0.8f, jumpSp*0.65f);
                 doubleJumped = true;
                 jumpButtonRelease = false;
             }
@@ -289,7 +295,7 @@ public class SalmonManager : MonoBehaviour
         #endregion
 
         #region ²ÈÇ½Ìø
-        if (canWallJump)
+        if (canWallJump && !haveEgg)
         {
             if (Input.GetAxis("Jump") == 1 && onWall && !onGround && canWallJump && jumpButtonRelease)
             {
@@ -309,7 +315,7 @@ public class SalmonManager : MonoBehaviour
         #endregion
 
         #region ÅÀÇ½
-        if (onWall && !onGround && rig.velocity.y <= 0 && dir.y != -1)
+        if (onWall && !onGround && rig.velocity.y <= 0 && dir.y != -1 && !haveEgg)
         {
             if (onLeftWall && Input.GetAxisRaw("Horizontal")<0)
             {
@@ -334,20 +340,24 @@ public class SalmonManager : MonoBehaviour
         curHealth -= damage;
         if (damageOnRight)
         {
-            rig.AddForce(new Vector2(-1, 0.75f) * 5f, ForceMode2D.Impulse);
+            rig.AddForce(new Vector2(-0.35f, 1f).normalized * 12.5f, ForceMode2D.Impulse);
         }
         else 
         {
-            rig.AddForce(new Vector2(1, 0.75f) * 5f, ForceMode2D.Impulse);
+            rig.AddForce(new Vector2(0.35f, 1f).normalized * 12.5f, ForceMode2D.Impulse);
         }
     }
     bool GroundCheck()
     {
         Collider2D coll = Physics2D.OverlapBox((Vector2)transform.position + pointOffset, size, 0, groundLayer);
         if (coll != null)
+        {
             return true;
-        else
+        }
+        else 
+        {
             return false;
+        }
     }
     bool LeftWallCheck()
     {
