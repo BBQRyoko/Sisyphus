@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1348342840007354987}
   - component: {fileID: 7786493161520881870}
   - component: {fileID: -5855604777489782354}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GoldenEgg (1)
   m_TagString: Egg
   m_Icon: {fileID: 0}
@@ -48,9 +48,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.050988644}
   serializedVersion: 2
-  m_Radius: 0.2
+  m_Radius: 0.14901134
 --- !u!50 &7786493161520881870
 Rigidbody2D:
   serializedVersion: 4
@@ -84,6 +84,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4151022dfcf172d46a5185374eca79bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPickable: 0
 --- !u!1 &7818970903359852737
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,7 +95,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6263976924520262533}
   - component: {fileID: 5996639667182906815}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,7 +158,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 561fcc10613359d43b4957fa6dd0656a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 49e9e6454d72e10478b9bdec3615a301, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

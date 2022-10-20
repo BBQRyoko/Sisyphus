@@ -16,6 +16,18 @@ public class EggManager : MonoBehaviour
         rig = GetComponent<Rigidbody2D>();
     }
 
+    private void Update()
+    {
+        if (isPickable)
+        {
+            gameObject.layer = 7;
+        }
+        else 
+        {
+            gameObject.layer = 6;
+        }
+    }
+
     void BounceOnEnemy(bool enemyOnRight) 
     {
         if (enemyOnRight)

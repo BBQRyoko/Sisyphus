@@ -191,10 +191,10 @@ public class SalmonManager : MonoBehaviour
                     }
                     else
                     {
-                        GameObject egg = Instantiate(shootingEgg, negShootingPos.transform);
+                        GameObject egg = Instantiate(shootingEgg, shootingPos.transform);
                         egg.SetActive(true);
                         egg.transform.parent = null;
-                        egg.transform.position = negShootingDir.transform.position;
+                        egg.transform.position = shootingPos.transform.position;
                         egg.GetComponent<Rigidbody2D>().velocity = curVelocity;
                         if (onGround)
                         {
