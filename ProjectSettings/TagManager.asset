@@ -15,7 +15,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - EndTrigger
   - Water
   - UI
   - ThrowingEgg

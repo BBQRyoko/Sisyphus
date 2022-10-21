@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EndingEvent : MonoBehaviour
 {
@@ -14,5 +15,9 @@ public class EndingEvent : MonoBehaviour
     void Update()
     {
         
+    }
+    public void LoadSceneEvent() 
+    {
+        SceneManager.LoadScene(0);
     }
 }

@@ -470,7 +470,7 @@ public class SalmonManager : MonoBehaviour
         {
             inWater = true;
         }
-        if (collision.gameObject.layer == 5) 
+        if (collision.gameObject.layer == 3) 
         {
             if (containerHealth < 10)
             {
