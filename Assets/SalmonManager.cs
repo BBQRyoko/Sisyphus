@@ -2,10 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class SalmonManager : MonoBehaviour
 {
+    [Header("UI")]
+    public Image ballFill;
+    public Image containerHP;
+    [SerializeField] GameObject end1;
+    [SerializeField] GameObject end2;
+    [SerializeField] GameObject end3;
+    [SerializeField] GameObject end4;
+    [SerializeField] GameObject uiGameobject;
+    [SerializeField] GameObject Title;
+
+
     [Header("Status")]
+    bool gameStart;
+    bool gameOver;
     public bool haveEgg;
     bool onGround;
     bool groundJumpReset;
@@ -19,7 +33,7 @@ public class SalmonManager : MonoBehaviour
     public bool isDamaged;
     float tempDamageTimer;
     [SerializeField] int curHealth;
-    [SerializeField] int maxHealth = 100;
+    [SerializeField] int maxHealth = 1000000000;
 
     [Header("Egg")]
     [SerializeField] float throwingForce;
@@ -86,16 +100,43 @@ public class SalmonManager : MonoBehaviour
         curHealth = maxHealth;
         containerHealth = maxContainerHealth;
         haveEgg = true;
+        babyEnergy = 100f;
     }
     private void Update()
     {
+        if (Input.GetAxis("Jump") == 1 && !gameStart) 
+        {
+            gameStart = true;
+        }
+        if (!gameStart)
+        {
+            uiGameobject.SetActive(false);
+            Title.SetActive(true);
+        }
+        else 
+        {
+            uiGameobject.SetActive(true);
+            Title.SetActive(false);
+        }
+        if (gameOver || !gameStart) return;
+        UIManager();
         EggManager();
         TempTimeManager();
     }
     private void FixedUpdate()
     {
+        if (Input.GetAxis("Jump") == 1 && !gameStart)
+        {
+            gameStart = true;
+        }
+        if (gameOver || !gameStart) return;
         CharacterManager();
         CharacterLocomtion();
+    }
+    void UIManager() 
+    {
+        ballFill.fillAmount = babyEnergy/100;
+        containerHP.fillAmount = ((float)containerHealth)/10;
     }
     void CharacterManager() 
     {
@@ -216,14 +257,16 @@ public class SalmonManager : MonoBehaviour
             if (babyEnergy <= 0) 
             {
                 babyEnergy = 0;
-                Debug.Log("Baby is alone and die");
+                gameOver = true;
+                end1.SetActive(true);
             }
             eggSprite.SetActive(false);
         }
         if (containerHealth <= 0) 
         {
             containerHealth = 0;
-            Debug.Log("Container destroyed, Game Over");
+            gameOver = true;
+            end2.SetActive(true);
         }
     }
     void CharacterLocomtion() 
@@ -426,6 +469,19 @@ public class SalmonManager : MonoBehaviour
         if (collision.gameObject.layer == 4) 
         {
             inWater = true;
+        }
+        if (collision.gameObject.layer == 5) 
+        {
+            if (containerHealth < 10)
+            {
+                gameOver = true;
+                end3.SetActive(true);
+            }
+            else 
+            {
+                gameOver = true;
+                end4.SetActive(true);
+            }
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
