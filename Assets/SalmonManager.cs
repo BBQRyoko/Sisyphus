@@ -15,6 +15,7 @@ public class SalmonManager : MonoBehaviour
     [SerializeField] GameObject end4;
     [SerializeField] GameObject uiGameobject;
     [SerializeField] GameObject Title;
+    [SerializeField] AudioSource audio;
 
 
     [Header("Status")]
@@ -107,6 +108,7 @@ public class SalmonManager : MonoBehaviour
         if (Input.GetAxis("Jump") == 1 && !gameStart) 
         {
             gameStart = true;
+            audio.Play();
         }
         if (!gameStart)
         {
@@ -208,7 +210,7 @@ public class SalmonManager : MonoBehaviour
             eggSprite.SetActive(true);
             if (babyEnergy <= 100) 
             {
-                babyEnergy += Time.deltaTime * 5f;
+                babyEnergy += Time.deltaTime * 25f;
             }
             if (!onWall) 
             {
@@ -300,6 +302,7 @@ public class SalmonManager : MonoBehaviour
         //ÌøÔ¾
         if (Input.GetAxis("Jump") == 1 && !isJumping && canJump && onGround && jumpButtonRelease && !onWall && throwingTimer<=0 && groundJumpReset)
         {
+            audio.Play();
             rig.velocity = new Vector2(rig.velocity.x, jumpSp);
             isJumping = true;
             jumpButtonRelease = false;
@@ -330,6 +333,7 @@ public class SalmonManager : MonoBehaviour
         {
             if (Input.GetAxis("Jump") == 1 && !doubleJumped && !haveEgg && !onWall && jumpButtonRelease)
             {
+                audio.Play();
                 Debug.Log("123");
                 rig.velocity = new Vector2(rig.velocity.x * 0.9f, jumpSp*0.75f);
                 doubleJumped = true;
@@ -365,6 +369,7 @@ public class SalmonManager : MonoBehaviour
         {
             if (Input.GetAxis("Jump") == 1 && onWall && !onGround && canWallJump && jumpButtonRelease)
             {
+                audio.Play();
                 if (onLeftWall)
                 {
                     rig.velocity = new Vector2(wallJumpSpX, wallJumpSpY);
